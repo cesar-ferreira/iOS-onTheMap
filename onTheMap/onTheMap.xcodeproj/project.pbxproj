@@ -22,6 +22,11 @@
 		BF5CD8DA262BD405002D4162 /* UserUdacity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CD8D9262BD404002D4162 /* UserUdacity.swift */; };
 		BF5CD8DD262BD491002D4162 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CD8DC262BD491002D4162 /* Account.swift */; };
 		BF5CD8E0262BD49E002D4162 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CD8DF262BD49E002D4162 /* Session.swift */; };
+		BF5CD8E7262BEE01002D4162 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CD8E6262BEE00002D4162 /* TabBarViewModel.swift */; };
+		BF5CD8EA262BFB5E002D4162 /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CD8E9262BFB5E002D4162 /* Student.swift */; };
+		BF5CD8ED262BFBB9002D4162 /* StudentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CD8EC262BFBB8002D4162 /* StudentResponse.swift */; };
+		BF5EC4A1262CC538000B10E8 /* AddLinkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5EC4A0262CC537000B10E8 /* AddLinkViewModel.swift */; };
+		BF5EC4A7262CC6E4000B10E8 /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5EC4A6262CC6E4000B10E8 /* UserInformation.swift */; };
 		BF71E09A261D52220021FD14 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF71E099261D52220021FD14 /* ApiClient.swift */; };
 		BF71E09E261D577C0021FD14 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF71E09D261D577C0021FD14 /* NetworkManager.swift */; };
 		BF8B13F0261B34730044F579 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8B13EF261B34730044F579 /* AppDelegate.swift */; };
@@ -48,6 +53,11 @@
 		BF5CD8D9262BD404002D4162 /* UserUdacity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUdacity.swift; sourceTree = "<group>"; };
 		BF5CD8DC262BD491002D4162 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		BF5CD8DF262BD49E002D4162 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		BF5CD8E6262BEE00002D4162 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
+		BF5CD8E9262BFB5E002D4162 /* Student.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
+		BF5CD8EC262BFBB8002D4162 /* StudentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentResponse.swift; sourceTree = "<group>"; };
+		BF5EC4A0262CC537000B10E8 /* AddLinkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLinkViewModel.swift; sourceTree = "<group>"; };
+		BF5EC4A6262CC6E4000B10E8 /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
 		BF71E099261D52220021FD14 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		BF71E09D261D577C0021FD14 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BF8B13EC261B34730044F579 /* onTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = onTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,15 +119,10 @@
 			isa = PBXGroup;
 			children = (
 				BF37D46D2622498700726AFE /* LoginViewModel.swift */,
+				BF5CD8E6262BEE00002D4162 /* TabBarViewModel.swift */,
+				BF5EC4A0262CC537000B10E8 /* AddLinkViewModel.swift */,
 			);
 			path = Presentation;
-			sourceTree = "<group>";
-		};
-		BF37D47126224BAD00726AFE /* API */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = API;
 			sourceTree = "<group>";
 		};
 		BF5CD8BC262B5C14002D4162 /* Cells */ = {
@@ -141,7 +146,6 @@
 		BF71E098261D520B0021FD14 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				BF37D47126224BAD00726AFE /* API */,
 				BF71E099261D52220021FD14 /* ApiClient.swift */,
 				BF71E09D261D577C0021FD14 /* NetworkManager.swift */,
 			);
@@ -157,6 +161,9 @@
 				BF5CD8D9262BD404002D4162 /* UserUdacity.swift */,
 				BF5CD8DC262BD491002D4162 /* Account.swift */,
 				BF5CD8DF262BD49E002D4162 /* Session.swift */,
+				BF5CD8E9262BFB5E002D4162 /* Student.swift */,
+				BF5CD8EC262BFBB8002D4162 /* StudentResponse.swift */,
+				BF5EC4A6262CC6E4000B10E8 /* UserInformation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -313,16 +320,21 @@
 				BF37D467262241BD00726AFE /* Authentication.swift in Sources */,
 				BF8B13F4261B34730044F579 /* LoginViewController.swift in Sources */,
 				BF8B13F0261B34730044F579 /* AppDelegate.swift in Sources */,
+				BF5CD8EA262BFB5E002D4162 /* Student.swift in Sources */,
 				BF5CD8B7262B522B002D4162 /* MapViewController.swift in Sources */,
 				BF71E09E261D577C0021FD14 /* NetworkManager.swift in Sources */,
+				BF5CD8ED262BFBB9002D4162 /* StudentResponse.swift in Sources */,
 				BF5CD8C4262B69BF002D4162 /* AddLocationViewController.swift in Sources */,
 				BF5CD8BF262B5C48002D4162 /* MyTableViewCell.swift in Sources */,
 				BF5CD8B4262B49D2002D4162 /* TabBarViewController.swift in Sources */,
 				BF5CD8E0262BD49E002D4162 /* Session.swift in Sources */,
 				BF5CD8D7262BBE6E002D4162 /* UdacityLocation.swift in Sources */,
+				BF5EC4A1262CC538000B10E8 /* AddLinkViewModel.swift in Sources */,
+				BF5EC4A7262CC6E4000B10E8 /* UserInformation.swift in Sources */,
 				BF5CD8C7262B8631002D4162 /* AddLinkViewController.swift in Sources */,
 				BF5CD8BA262B523D002D4162 /* TableViewController.swift in Sources */,
 				BF5CD8DD262BD491002D4162 /* Account.swift in Sources */,
+				BF5CD8E7262BEE01002D4162 /* TabBarViewModel.swift in Sources */,
 				BF37D46E2622498700726AFE /* LoginViewModel.swift in Sources */,
 				BF8B13F2261B34730044F579 /* SceneDelegate.swift in Sources */,
 				BF71E09A261D52220021FD14 /* ApiClient.swift in Sources */,

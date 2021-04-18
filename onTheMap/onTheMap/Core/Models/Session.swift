@@ -11,9 +11,4 @@ struct Session: Codable {
 
     let id: String?
     let expiration: String?
-
-//    public init(id: String, expiration: String) {
-//        self.id = id
-//        self.expiration = expiration
-//    }
 }

@@ -27,11 +27,11 @@ class LoginViewModel {
         networkManager.login(udacity: udacity, completion: { [weak self] result in
             switch result {
             case .success(let response):
+                UserDefaults.standard.set(response.account?.key, forKey: "userLogged")
                 self?.delegate?.didLogin()
             case .failure(let error):
                 print(error.localizedDescription)
             }
         })
     }
-
 }

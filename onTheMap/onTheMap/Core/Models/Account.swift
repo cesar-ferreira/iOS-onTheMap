@@ -11,9 +11,4 @@ struct Account: Codable {
 
     let registered: Bool?
     let key: String?
-
-//    public init(registered: Bool, key: String) {
-//        self.registered = registered
-//        self.key = key
-//    }
 }

@@ -9,7 +9,11 @@ import Moya
 
 enum ApiClient {
     case login(udacity: Udacity)
-    case getStudentLocation(limit: Int?, skip: Int?, order: String?, uniqueKey: String?)
+    case logout
+    case getStudentById(id: String)
+    case getStudentLocation(uniqueKey: String?)
+    case postStudentLocation(student: Student)
+
 }
 
 extension ApiClient: TargetType {
@@ -20,19 +24,23 @@ extension ApiClient: TargetType {
 
     var path: String {
         switch self {
-        case .login:
+        case .login, .logout:
             return "/session"
-        case .getStudentLocation:
+        case .getStudentById(id: let id):
+            return "/users/\(id)"
+        case .getStudentLocation, .postStudentLocation:
             return "/StudentLocation"
         }
     }
 
     var method: Method {
         switch self {
-        case .getStudentLocation:
+        case .getStudentLocation, .getStudentById:
             return .get
-        case .login:
+        case .login, .postStudentLocation:
             return .post
+        case .logout:
+            return .delete
         }
     }
 
@@ -42,29 +50,17 @@ extension ApiClient: TargetType {
 
     var task: Task {
         switch self {
-        case .getStudentLocation(limit: let limit, skip: let skip, order: let order, uniqueKey: let uniqueKey):
-
-            var params: [String:Any] = ["": ""]
-            if let limit = limit {
-                params["limit"] = limit
-            }
-
-            if let skip = skip {
-                params["skip"] = skip
-            }
-
-            if let order = order {
-                params["order"] = order
-            }
-
-            if let uniqueKey = uniqueKey {
-                params["uniqueKey"] = uniqueKey
-            }
-//            return .requestParameters(parameters: params, encoding: JSONEncoding.default)
-
-            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .getStudentLocation(uniqueKey: let uniqueKey):
+            return .requestParameters(parameters: ["uniqueKey" : uniqueKey!], encoding: URLEncoding.queryString)
         case .login(udacity: let udacity):
             return .requestJSONEncodable(udacity)
+        case .postStudentLocation(student: let student):
+            return .requestJSONEncodable(student)
+        case .getStudentById:
+            return .requestPlain
+        case .logout:
+            let params: [String:Any] = ["": ""]
+            return .requestParameters(parameters: params, encoding: JSONEncoding.default)
         }
     }
 

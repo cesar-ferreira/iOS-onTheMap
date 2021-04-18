@@ -7,11 +7,7 @@
 
 import Foundation
 
-public class Udacity: Codable {
+struct Udacity: Codable {
 
-    var udacity: Authentication
-
-    public init(udacity: Authentication) {
-        self.udacity = udacity
-    }
+    var udacity: Authentication?
 }

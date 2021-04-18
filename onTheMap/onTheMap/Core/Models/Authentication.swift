@@ -7,13 +7,8 @@
 
 import Foundation
 
-public class Authentication: Codable {
+struct Authentication: Codable {
 
-    var username: String
-    var password: String
-
-    public init(username: String, password: String) {
-        self.username = username
-        self.password = password
-    }
+    var username: String?
+    var password: String?
 }

@@ -14,17 +14,31 @@ class AddLinkViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var linkTextField: UITextField!
 
-    var location = String()
+    private let viewModel = AddLinkViewModel()
 
+    private var currentUser: UserInformation?
+    private var userId: String = ""
+
+    var location = String()
     let locationManager = CLLocationManager()
     var selectedPin: MKPlacemark? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        viewModel.delegate = self
+
         setupUI()
         setupLocationManager()
         searchLocation()
+        
+        getUser()
+    }
+
+    private func getUser() {
+        let defaults = UserDefaults.standard
+        userId = defaults.string(forKey: "userLogged") ?? ""
+        viewModel.getUserById(id: userId)
     }
 
     private func setupUI() {
@@ -40,7 +54,16 @@ class AddLinkViewController: UIViewController {
 
 
     @IBAction func submitButtonTapped(_ sender: Any) {
-        print("submited tapped")
+
+        let submitStudent = Student(
+            firstName: currentUser?.firstName,
+            lastName: currentUser?.lastName,
+            latitude: selectedPin?.coordinate.latitude,
+            longitude: selectedPin?.coordinate.longitude,
+            mapString: location, mediaURL: linkTextField.text,
+            uniqueKey: userId, objectId: nil, createdAt: nil, updatedAt: nil)
+
+        viewModel.postStudentLocation(student: submitStudent)
     }
 
     @IBAction func cancelButtonTapped(_ sender: Any) {
@@ -59,10 +82,6 @@ class AddLinkViewController: UIViewController {
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         annotation.title = placemark.name
-        if let city = placemark.locality,
-        let state = placemark.administrativeArea {
-            annotation.subtitle = "(city) (state)"
-        }
         mapView.addAnnotation(annotation)
         let span = MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
         let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
@@ -111,5 +130,18 @@ extension AddLinkViewController : CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
+    }
+}
+
+extension AddLinkViewController: AddLinkViewModelProtocol {
+    func didStudentPosted() {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "TabBarViewController") as! TabBarViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        self.present(newViewController, animated: true, completion: nil)
+    }
+
+    func didUser(user: UserInformation) {
+        currentUser = user
     }
 }

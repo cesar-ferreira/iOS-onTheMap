@@ -6,80 +6,128 @@
 //
 
 import UIKit
+import MapKit
 
 class TableViewController: UIViewController {
 
     @IBOutlet weak var myTableView: UITableView!
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    private let viewModel = TabBarViewModel()
 
-    var mock = ["teste 1","teste 2", "teste 3","teste 4", "teste 5"]
+    var tableList: [Student] = []
+    private var userId: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         
         myTableView.register(MyTableViewCell.nib(), forCellReuseIdentifier: MyTableViewCell.reuseIdentifier)
 
         myTableView.delegate = self
         myTableView.dataSource = self
+        viewModel.delegate = self
+
+        setupNavigationBar()
+        getUser()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        getUser()
+    }
+
+    private func getUser() {
+        let defaults = UserDefaults.standard
+        userId = defaults.string(forKey: "userLogged") ?? ""
+
+        getLocations()
+    }
+
+    private func getLocations() {
+        loading(isLoading: true)
+        viewModel.getStudents(uniqueKey: userId)
+    }
+
+    private func loading(isLoading: Bool) {
+        loadingView.isHidden = !isLoading
+        loadingIndicator.isHidden = !isLoading
+        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
     }
 
     @objc func addLocationTapped() {
-        print("add location tapped")
+        showAddLocation()
+    }
+
+    func showAddLocation() {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "AddLocationViewController") as! AddLocationViewController
+        newViewController.modalPresentationStyle = .fullScreen
+        self.present(newViewController, animated: true, completion: nil)
     }
 
     @objc func refreshTapped() {
-        print("refresh tapped")
+        getLocations()
+    }
+
+    @objc func logoutTapped() {
+        viewModel.logout()
     }
 
     private func setupNavigationBar() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "add", style: .plain, target: self, action: #selector(addLocationTapped))
-        let addLocation = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLocationTapped))
-        navigationItem.rightBarButtonItems = [addLocation]
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutTapped))
+        let logout = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(logoutTapped))
+        navigationItem.rightBarButtonItems = [logout]
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "add", style: .plain, target: self, action: #selector(addLocationTapped))
+        let addLocation = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLocationTapped))
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "reload", style: .plain, target: self, action: #selector(refreshTapped))
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshTapped))
-        navigationItem.rightBarButtonItems = [refresh]
+
+        navigationItem.rightBarButtonItems = [addLocation, refresh]
+    }
+
+    private func setupMapWithResponse(result: StudentResponse) {
+        tableList = result.results ?? []
+        myTableView.reloadData()
     }
 }
 
 extension TableViewController: UITableViewDelegate {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-//        self.showEmptyView(isVisible: (memes?.count ?? 0 == 0))
-//        return memes?.count ?? 0
         return 1
     }
-
 }
 
 extension TableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mock.count
+        return tableList.count
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let meme = memes?[indexPath.row]
-//
-//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        let newViewController = storyBoard.instantiateViewController(withIdentifier: "MemeDetailsViewController") as! MemeDetailsViewController
-//        newViewController.image = meme!.memedImage
-//
-//        self.present(newViewController, animated: true, completion: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
+        let student = tableList[indexPath.row]
+
+        let app = UIApplication.shared
+        if let toOpen = student.mediaURL {
+            app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let cell = tableView.dequeueReusableCell(withIdentifier: MyTableViewCell.reuseIdentifier, for: indexPath) as! MyTableViewCell
-
-        cell.nameLabel.text = mock[indexPath.row]
-//        let meme = memes?[indexPath.row]
-//
-//        cell.memedImage.image = (meme?.memedImage)!
-//        cell.topLabel.text = meme?.bottomText
-//        cell.bottomLabel.text = meme?.bottomText
-
+        cell.nameLabel.text = "\(String(describing: tableList[indexPath.row].firstName!)) \(String(describing: tableList[indexPath.row].lastName!))"
         return cell
     }
 }
 
+extension TableViewController: TabBarViewModelProtocol {
+    func getStudents(result: StudentResponse) {
+        loading(isLoading: false)
+        self.setupMapWithResponse(result: result)
+    }
+
+    func didLogout() {
+        self.dismiss(animated: true, completion: nil)
+    }
+}

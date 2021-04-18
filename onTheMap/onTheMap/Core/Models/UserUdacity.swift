@@ -12,8 +12,4 @@ struct UserUdacity: Codable {
     let account: Account?
     let session: Session?
 
-//    public init(account: Account, session: Session) {
-//        self.account = account
-//        self.session = session
-//    }
 }
